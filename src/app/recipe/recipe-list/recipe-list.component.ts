@@ -1,28 +1,29 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RecipeItemComponent } from "./recipe-item.component";
 import { Recipe } from '../recipe.model';
+import { CommonModule } from '@angular/common';
+import { inject } from '@angular/core';
+import { RecipeService } from '../recipe.service';
 
 @Component({
   selector: 'app-recipe-list',
-  imports: [RecipeItemComponent],
+  imports: [RecipeItemComponent, CommonModule],
   templateUrl: './recipe-list.component.html',
   styles: ``
 })
 export class RecipeListComponent implements OnInit{
-@Output() recipeSelected = new EventEmitter<Recipe>();
-recipe = new Recipe('Dummy','Dummy','assets/dummy.png')
-Selected: any;
-selectedRecipe: Recipe | undefined;
 
-  constructor()
-  {
-  }
+  recipes!: Recipe[];
+
+  private recipeService = inject(RecipeService);
 
   ngOnInit(){
+    this.recipes = this.recipeService.getRecipes();
+
+    console.log(this.recipes)
   }
 
   onSelected(recipe: Recipe){
-    this.recipeSelected.emit(recipe);
   }
 
 }
