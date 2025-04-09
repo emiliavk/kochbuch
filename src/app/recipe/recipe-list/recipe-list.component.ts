@@ -4,6 +4,7 @@ import { Recipe } from '../recipe.model';
 import { CommonModule } from '@angular/common';
 import { inject } from '@angular/core';
 import { RecipeService } from '../recipe.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-recipe-list',
@@ -12,18 +13,21 @@ import { RecipeService } from '../recipe.service';
   styles: ``
 })
 export class RecipeListComponent implements OnInit{
-
   recipes!: Recipe[];
 
   private recipeService = inject(RecipeService);
+  private router = inject(Router);
+
+  onNewRecipe() {
+    this.router.navigate(['/rezepte', 'neu'])
+  }
 
   ngOnInit(){
     this.recipes = this.recipeService.getRecipes();
-
     console.log(this.recipes)
-  }
 
-  onSelected(recipe: Recipe){
+    this.recipeService.recipesChanged.subscribe(
+      (recipes: Recipe[]) => this.recipes = recipes
+    );
   }
-
 }
